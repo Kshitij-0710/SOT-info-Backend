@@ -42,19 +42,21 @@ class AuthViewSet(viewsets.GenericViewSet):
         email = serializer.validated_data['email']
         name = serializer.validated_data['name']
         phone_number = serializer.validated_data['phone_number']
+        user_type = serializer.validated_data['user_type']
         
         # Hash the password for storage
         password = make_password(serializer.validated_data['password'])
         
         # Generate OTP and store registration data temporarily
-        otp = RegistrationOTP.generate_otp(email, name, phone_number, password)
+        otp = RegistrationOTP.generate_otp(email, name, phone_number, user_type, password)
         
         # Send OTP via email
         send_otp_email(email, name, otp.code)
         
         return Response({
             'message': 'Registration initiated. Please check your email for OTP to complete registration.',
-            'email': email
+            'email': email,
+            'user_type': user_type
         }, status=status.HTTP_200_OK)
     
     @action(detail=False, methods=['post'])
@@ -69,6 +71,7 @@ class AuthViewSet(viewsets.GenericViewSet):
             email=registration_data.email,
             name=registration_data.name,
             phone_number=registration_data.phone_number,
+            user_type=registration_data.user_type,
             password=registration_data.password,  # Already hashed during registration
             is_verified=True
         )
@@ -141,6 +144,7 @@ class AuthViewSet(viewsets.GenericViewSet):
             registration_otp.email,
             registration_otp.name,
             registration_otp.phone_number,
+            registration_otp.user_type,
             registration_otp.password
         )
         
