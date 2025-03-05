@@ -6,6 +6,7 @@ class UserRegistrationSerializer(serializers.Serializer):
     email = serializers.EmailField()
     name = serializers.CharField(max_length=255)
     phone_number = serializers.CharField(max_length=15)
+    user_type = serializers.ChoiceField(choices=User.USER_TYPE_CHOICES, default='STUDENT')
     password = serializers.CharField(write_only=True)
     
     def validate_email(self, value):
@@ -46,4 +47,5 @@ class UserLoginSerializer(serializers.Serializer):
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['id', 'email', 'name', 'phone_number', 'date_joined']
+        fields = ['id', 'email', 'name', 'phone_number', 'user_type', 'date_joined']
+        read_only_fields = ['date_joined']
