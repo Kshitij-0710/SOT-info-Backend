@@ -4,3 +4,4 @@ djangorestframework_simplejwt==5.3.1
 drf_yasg==1.21.8
 django-jet-4
 django-cors-headers
+python-dotenv
