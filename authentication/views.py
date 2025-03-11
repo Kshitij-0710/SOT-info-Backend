@@ -28,7 +28,7 @@ class AuthViewSet(viewsets.GenericViewSet):
         return UserSerializer
     
     def get_permissions(self):
-        if self.action in ['register', 'verify_otp', 'login']:
+        if self.action in ['register', 'verify_otp', 'login','resend_otp']:
             permission_classes = [AllowAny]
         else:
             permission_classes = [IsAuthenticated]
@@ -128,7 +128,6 @@ class AuthViewSet(viewsets.GenericViewSet):
                 status=status.HTTP_400_BAD_REQUEST
             )
         
-        # Find the existing registration request
         registration_otp = RegistrationOTP.objects.filter(
             email=email
         ).order_by('-created_at').first()
@@ -139,18 +138,28 @@ class AuthViewSet(viewsets.GenericViewSet):
                 status=status.HTTP_404_NOT_FOUND
             )
         
-        # Generate a new OTP
-        new_otp = RegistrationOTP.generate_otp(
-            registration_otp.email,
-            registration_otp.name,
-            registration_otp.phone_number,
-            registration_otp.user_type,
-            registration_otp.password
-        )
+        stored_email = registration_otp.email
+        stored_name = registration_otp.name
+        stored_phone_number = registration_otp.phone_number
+        stored_user_type = registration_otp.user_type
+        stored_password = registration_otp.password
         
-        # Send OTP via email
-        send_otp_email(new_otp.email, new_otp.name, new_otp.code)
-        
-        return Response({
-            'message': 'A new OTP has been sent to your email.'
-        }, status=status.HTTP_200_OK)
+        try:
+            new_otp = RegistrationOTP.generate_otp(
+                stored_email,
+                stored_name,
+                stored_phone_number,
+                stored_user_type,
+                stored_password
+            )
+            
+            send_otp_email(new_otp.email, new_otp.name, new_otp.code)
+            
+            return Response({
+                'message': 'A new OTP has been sent to your email.'
+            }, status=status.HTTP_200_OK)
+        except Exception as e:
+            print(f"Error in resend_otp: {str(e)}")
+            return Response({
+                'message': 'Failed to send OTP. Please try again later.'
+            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
