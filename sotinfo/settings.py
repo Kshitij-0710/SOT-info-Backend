@@ -62,7 +62,7 @@ REST_FRAMEWORK = {
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
 }
-
+#checking if reneder restarts fully or resumes
 # JWT settings
 from datetime import timedelta
 
