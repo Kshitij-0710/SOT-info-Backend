@@ -15,10 +15,10 @@ from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-load_dotenv()
+
 
 SECRET_KEY = os.environ.get('SECRET_KEY')
-DEBUG = True
+DEBUG = False
 
 
 ALLOWED_HOSTS = ['*']
@@ -62,7 +62,7 @@ REST_FRAMEWORK = {
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
 }
-#checking if reneder restarts fully or resumes
+
 # JWT settings
 from datetime import timedelta
 
