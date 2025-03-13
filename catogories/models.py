@@ -18,8 +18,7 @@ class Form(models.Model):
     to_date = models.DateField(null=True, blank=True)
     category = models.CharField(max_length=20, choices=CATEGORY_CHOICES)
     created_at = models.DateTimeField(auto_now_add=True)
-    
-    # User fields with correct configuration
+    is_top_6 = models.BooleanField(default=False)
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='forms')
     user_type = models.CharField(max_length=10, choices=User.USER_TYPE_CHOICES, editable=False)
 
