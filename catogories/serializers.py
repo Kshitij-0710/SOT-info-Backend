@@ -10,6 +10,7 @@ class FormSerializer(serializers.ModelSerializer):
             'achivements', 'achivements', 'from_date', 
             'to_date', 'category', 'created_at', 'user_type'
         ]
+        read_only_fields = ['user_type', 'is_top_6']
     def get_tech_stack_list(self, obj):
         """Returns tech stack as a list for the API"""
         return obj.get_tech_stack_list()
