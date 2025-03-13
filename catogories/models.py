@@ -1,4 +1,5 @@
 from django.db import models
+from authentication.models import User
 
 class Form(models.Model):
     CATEGORY_CHOICES = [
@@ -17,9 +18,11 @@ class Form(models.Model):
     to_date = models.DateField(null=True, blank=True)
     category = models.CharField(max_length=20, choices=CATEGORY_CHOICES)
     created_at = models.DateTimeField(auto_now_add=True)
+    
+    # User fields with correct configuration
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='forms')
+    user_type = models.CharField(max_length=10, choices=User.USER_TYPE_CHOICES, editable=False)
 
-    def __str__(self):
-        return f"{self.category.capitalize()}: {self.title}"
     def __str__(self):
         return f"{self.category.capitalize()}: {self.title}"
     
