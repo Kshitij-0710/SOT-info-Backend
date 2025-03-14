@@ -9,7 +9,6 @@ class FormViewSet(viewsets.ModelViewSet):
     """
     queryset = Form.objects.all().order_by('-created_at')
     serializer_class = FormSerializer
-    permission_classes = [IsAuthenticated]  
     def get_queryset(self):
         """Return forms created by the authenticated user"""
         return Form.objects.filter(user=self.request.user).order_by('-created_at')
