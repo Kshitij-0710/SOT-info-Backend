@@ -9,7 +9,7 @@ class UserSerializer(serializers.ModelSerializer):
         fields = ['id', 'name', 'email', 'user_type']
 class FormSerializer(serializers.ModelSerializer):
     """Serializer for Form model with nested user data"""
-    user = UserSerializer(read_only=True)
+    user = UserSerializer(read_only=True, allow_null=True)
     
     class Meta:
         model = Form
@@ -19,6 +19,7 @@ class FormSerializer(serializers.ModelSerializer):
             'from_date', 'to_date', 'category', 'created_at', 
             'user_type', 'is_top_6', 'user'
         ]
+        read_only_fields = ['user_type', 'is_top_6']
         read_only_fields = ['user_type', 'is_top_6']
     def get_tech_stack_list(self, obj):
         """Returns tech stack as a list for the API"""
