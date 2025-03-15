@@ -19,7 +19,6 @@ class FormViewSet(viewsets.ModelViewSet):
     - Anonymous users can view forms (GET)
     - Authenticated users can create and manage their own forms
     """
-    queryset = Form.objects.all().order_by('-created_at')
     serializer_class = FormSerializer
     permission_classes = [ReadOnlyOrAuthenticated]
     
@@ -29,12 +28,12 @@ class FormViewSet(viewsets.ModelViewSet):
         - For anonymous users or GET requests, return all forms
         - For authenticated users' write operations, return only their forms
         """
-        # For list views and anonymous users, return all forms
-        if self.action == 'list' or not self.request.user.is_authenticated:
-            return Form.objects.all().order_by('-created_at')
+        base_queryset = Form.objects.select_related('user').order_by('-created_at')
         
-        # For authenticated users performing other actions, filter by user
-        return Form.objects.filter(user=self.request.user).order_by('-created_at')
+        if self.action == 'list' or not self.request.user.is_authenticated:
+            return base_queryset
+        
+        return base_queryset.filter(user=self.request.user)
     
     def perform_create(self, serializer):
         """
