@@ -8,7 +8,7 @@ class FormSerializer(serializers.ModelSerializer):
             'id', 'title', 'description', 'team_members', 
             'tech_stack', 'tech_stack', 'projecturl', 
             'achivements', 'achivements', 'from_date', 
-            'to_date', 'category', 'created_at', 'user_type'
+            'to_date', 'category', 'is_top_6','created_at', 'user_type'
         ]
         read_only_fields = ['user_type', 'is_top_6']
     def get_tech_stack_list(self, obj):
