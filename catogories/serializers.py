@@ -1,14 +1,23 @@
 from rest_framework import serializers
-from .models import Form
 
+from authentication.models import User
+from .models import Form
+class UserSerializer(serializers.ModelSerializer):
+    """Serializer for User data to include in Form responses"""
+    class Meta:
+        model = User
+        fields = ['id', 'name', 'email', 'user_type']
 class FormSerializer(serializers.ModelSerializer):
+    """Serializer for Form model with nested user data"""
+    user = UserSerializer(read_only=True)
+    
     class Meta:
         model = Form
-        fields = fields = [
+        fields = [
             'id', 'title', 'description', 'team_members', 
-            'tech_stack', 'tech_stack', 'projecturl', 
-            'achivements', 'achivements', 'from_date', 
-            'to_date', 'category', 'is_top_6','created_at', 'user_type'
+            'tech_stack', 'projecturl', 'achivements', 
+            'from_date', 'to_date', 'category', 'created_at', 
+            'user_type', 'is_top_6', 'user'
         ]
         read_only_fields = ['user_type', 'is_top_6']
     def get_tech_stack_list(self, obj):
