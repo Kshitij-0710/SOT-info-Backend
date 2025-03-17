@@ -18,7 +18,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 load_dotenv()
 SECRET_KEY = os.environ.get('SECRET_KEY')
-DEBUG = False
+DEBUG = True
 
 
 ALLOWED_HOSTS = ['*']
@@ -113,7 +113,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'sotinfo_db',
         'USER': 'sotinfo_user',
-        'PASSWORD': 'sajay1234',
+        'PASSWORD': '1234',
         'HOST': 'localhost',
         'PORT': '5432',
         'OPTIONS': {

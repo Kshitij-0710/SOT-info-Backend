@@ -1,7 +1,8 @@
 from rest_framework import viewsets, permissions
 from .models import Form
 from .serializers import FormSerializer
-
+from rest_framework.decorators import action
+from rest_framework.response import Response
 class ReadOnlyOrAuthenticated(permissions.BasePermission):
     """
     Custom permission to allow read-only access to all users,
@@ -34,6 +35,43 @@ class FormViewSet(viewsets.ModelViewSet):
             return base_queryset
         
         return base_queryset.filter(user=self.request.user)
+
+    # Add this inside the FormViewSet class
+    @action(detail=False, methods=['get'])
+    def top_six(self, request):
+        """Optimized endpoint just for homepage data"""
+        # First filter for top_6 items only (much smaller dataset)
+        top_forms = Form.objects.filter(is_top_6=True).select_related('user')
+        
+        # Pre-categorize on the server
+        result = {
+            'studentAchievements': self.get_serializer(
+                top_forms.filter(user_type='STUDENT', category='achievement')[:6], 
+                many=True
+            ).data,
+            'facultyAchievements': self.get_serializer(
+                top_forms.filter(user_type='FACULTY', category='achievement')[:6], 
+                many=True
+            ).data,
+            'studentProjects': self.get_serializer(
+                top_forms.filter(user_type='STUDENT', category='project')[:6], 
+                many=True
+            ).data,
+            'facultyProjects': self.get_serializer(
+                top_forms.filter(user_type='FACULTY', category='project')[:6], 
+                many=True
+            ).data,
+            'studentResearch': self.get_serializer(
+                top_forms.filter(user_type='STUDENT', category='research')[:6], 
+                many=True
+            ).data,
+            'facultyResearch': self.get_serializer(
+                top_forms.filter(user_type='FACULTY', category='research')[:6], 
+                many=True
+            ).data,
+        }
+        
+        return Response(result)
     
     def perform_create(self, serializer):
         """

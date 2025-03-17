@@ -17,16 +17,16 @@ from catogories.models import Form  # Assuming this is the correct path
 
 # Sample data for generation
 tech_stacks = [
-    "Python, Django, React, PostgreSQL",
-    "JavaScript, Node.js, Express, MongoDB",
-    "Java, Spring Boot, MySQL, Angular",
-    "Python, TensorFlow, Keras, scikit-learn",
-    "C++, Qt, SQLite",
-    "Swift, Core Data, Firebase",
-    "Ruby on Rails, Redis, PostgreSQL",
-    "Flutter, Dart, Firebase",
-    "Go, Docker, Kubernetes, AWS",
-    "PHP, Laravel, MySQL, Vue.js"
+    ["Python", "Django", "React", "PostgreSQL"],
+    ["JavaScript", "Node.js", "Express", "MongoDB"],
+    ["Java", "Spring Boot", "MySQL", "Angular"],
+    ["Python", "TensorFlow", "Keras", "scikit-learn"],
+    ["C++", "Qt", "SQLite"],
+    ["Swift", "Core Data", "Firebase"],
+    ["Ruby on Rails", "Redis", "PostgreSQL"],
+    ["Flutter", "Dart", "Firebase"],
+    ["Go", "Docker", "Kubernetes", "AWS"],
+    ["PHP", "Laravel", "MySQL", "Vue.js"]
 ]
 
 team_members_options = [
@@ -56,16 +56,16 @@ project_urls = [
 ]
 
 achievements_options = [
-    "First Place Hackathon 2023, Featured in Tech Magazine",
-    "10,000+ Downloads, 4.8 Star Rating",
-    "Published in IEEE Journal, Cited 25+ times",
-    "Reduced processing time by 40%, Increased user engagement by 35%",
-    "Best Student Project Award, Patent Filed",
-    "Open Source Contribution with 50+ stars on GitHub",
-    "Invited talk at Industry Conference, Featured Case Study",
-    "Successfully deployed to production, Serving 1000+ daily users",
-    "Research grant awarded, Collaboration with leading industry partner",
-    "Innovator Award 2023, Published in ACM Conference"
+    ["First Place Hackathon 2023", "Featured in Tech Magazine"],
+    ["10,000+ Downloads", "4.8 Star Rating"],
+    ["Published in IEEE Journal", "Cited 25+ times"],
+    ["Reduced processing time by 40%", "Increased user engagement by 35%"],
+    ["Best Student Project Award", "Patent Filed"],
+    ["Open Source Contribution with 50+ stars on GitHub"],
+    ["Invited talk at Industry Conference", "Featured Case Study"],
+    ["Successfully deployed to production", "Serving 1000+ daily users"],
+    ["Research grant awarded", "Collaboration with leading industry partner"],
+    ["Innovator Award 2023", "Published in ACM Conference"]
 ]
 
 # Achievement project data
