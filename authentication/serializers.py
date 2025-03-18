@@ -8,7 +8,7 @@ class UserRegistrationSerializer(serializers.Serializer):
     phone_number = serializers.CharField(max_length=15)
     user_type = serializers.ChoiceField(choices=User.USER_TYPE_CHOICES, default='STUDENT')
     password = serializers.CharField(write_only=True)
-    
+    ref_name = "AuthUserSerializer" 
     def validate_email(self, value):
         # Check if email already exists in the User model
         if User.objects.filter(email=value).exists():
