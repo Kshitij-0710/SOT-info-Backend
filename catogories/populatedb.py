@@ -151,15 +151,15 @@ project_descriptions = [
 
 # Student specific data
 student_first_names = [
-    "Aiden", "Sophia", "Ethan", "Olivia", "Liam", 
-    "Emma", "Noah", "Ava", "Mason", "Isabella", 
-    "Lucas", "Mia", "Oliver", "Charlotte", "Elijah"
+    "Kshitij", "Dhruval", "Sajay", "Shravani", "Sabrina", 
+    "Taylor", "Zendaya", "Selena", "Ryan", "Margot", 
+    "Tom", "Emma", "Chris", "Dua", "Emma"
 ]
 
 student_last_names = [
-    "Smith", "Johnson", "Williams", "Brown", "Jones",
-    "Garcia", "Miller", "Davis", "Rodriguez", "Martinez",
-    "Hernandez", "Lopez", "Gonzalez", "Wilson", "Anderson"
+    "Moghe", "Padia", "Raj", "Wanjari", "Carpenter",
+    "Swift", "Coleman", "Gomez", "Reynolds", "Robbie",
+    "Holland", "Stone", "Hemsworth", "Lipa", "Watson"
 ]
 
 # Faculty specific data

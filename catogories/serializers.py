@@ -7,6 +7,7 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ['id', 'name', 'email', 'user_type']
+        ref_name = "CategoryUserSerializer"
 class FormSerializer(serializers.ModelSerializer):
     """Serializer for Form model with nested user data"""
     user = UserSerializer(read_only=True, allow_null=True)

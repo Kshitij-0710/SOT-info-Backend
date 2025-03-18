@@ -3,6 +3,7 @@ from .models import Form
 from .serializers import FormSerializer
 from rest_framework.decorators import action
 from rest_framework.response import Response
+
 class ReadOnlyOrAuthenticated(permissions.BasePermission):
     """
     Custom permission to allow read-only access to all users,
@@ -12,7 +13,15 @@ class ReadOnlyOrAuthenticated(permissions.BasePermission):
         # Allow GET, HEAD and OPTIONS requests without authentication
         if request.method in permissions.SAFE_METHODS:
             return True
+        # For write operations, require authentication
         return request.user and request.user.is_authenticated
+    
+    def has_object_permission(self, request, view, obj):
+        # Allow GET, HEAD and OPTIONS requests without authentication
+        if request.method in permissions.SAFE_METHODS:
+            return True
+        # Write permissions only allowed to the owner
+        return request.user and request.user.is_authenticated and obj.user.id == request.user.id
 
 class FormViewSet(viewsets.ModelViewSet):
     """
@@ -27,16 +36,20 @@ class FormViewSet(viewsets.ModelViewSet):
         """
         Return filtered queryset based on authentication status:
         - For anonymous users or GET requests, return all forms
-        - For authenticated users' write operations, return only their forms
+        - For authenticated users' write operations, return all forms
+          (object-level permissions will be checked separately)
         """
-        base_queryset = Form.objects.select_related('user').order_by('-created_at')
-        
-        if self.action == 'list' or not self.request.user.is_authenticated:
-            return base_queryset
-        
-        return base_queryset.filter(user=self.request.user)
+        return Form.objects.select_related('user').order_by('-created_at')
+    @action(detail=False, methods=['get'])
+    def my_forms(self, request):
+        """Endpoint to get only the current user's forms"""
+        if not request.user.is_authenticated:
+            return Response({"detail": "Authentication required"}, status=401)
+            
+        forms = Form.objects.filter(user=request.user).select_related('user').order_by('-created_at')
+        serializer = self.get_serializer(forms, many=True)
+        return Response(serializer.data)
 
-    # Add this inside the FormViewSet class
     @action(detail=False, methods=['get'])
     def top_six(self, request):
         """Optimized endpoint just for homepage data"""
@@ -77,11 +90,7 @@ class FormViewSet(viewsets.ModelViewSet):
         """
         Save the form with the authenticated user and their user_type
         """
-        if self.request.user.is_authenticated:
-            serializer.save(
-                user=self.request.user,
-                user_type=self.request.user.user_type
-            )
-        else:
-            # This should never happen since permission checks would prevent it
-            raise PermissionError("Authentication required to create forms")
+        serializer.save(
+            user=self.request.user,
+            user_type=self.request.user.user_type
+        )
