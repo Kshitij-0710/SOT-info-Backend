@@ -85,7 +85,41 @@ class FormViewSet(viewsets.ModelViewSet):
         }
         
         return Response(result)
-    
+    @action(detail=False, methods=['get'])
+    def top_six_ongoing(self, request):
+        """Optimized endpoint for ongoing projects"""
+        # First filter for top ongoing items only (much smaller dataset)
+        ongoing_forms = Form.objects.filter(is_top_6=True, is_ongoing=True).select_related('user')
+        
+        # Pre-categorize on the server
+        result = {
+            'studentAchievements': self.get_serializer(
+                ongoing_forms.filter(user_type='STUDENT', category='achievement')[:6], 
+                many=True
+            ).data,
+            'facultyAchievements': self.get_serializer(
+                ongoing_forms.filter(user_type='FACULTY', category='achievement')[:6], 
+                many=True
+            ).data,
+            'studentProjects': self.get_serializer(
+                ongoing_forms.filter(user_type='STUDENT', category='project')[:6], 
+                many=True
+            ).data,
+            'facultyProjects': self.get_serializer(
+                ongoing_forms.filter(user_type='FACULTY', category='project')[:6], 
+                many=True
+            ).data,
+            'studentResearch': self.get_serializer(
+                ongoing_forms.filter(user_type='STUDENT', category='research')[:6], 
+                many=True
+            ).data,
+            'facultyResearch': self.get_serializer(
+                ongoing_forms.filter(user_type='FACULTY', category='research')[:6], 
+                many=True
+            ).data,
+        }
+        
+        return Response(result)
     def perform_create(self, serializer):
         """
         Save the form with the authenticated user and their user_type
