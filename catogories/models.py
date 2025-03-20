@@ -32,7 +32,8 @@ class Form(models.Model):
     is_top_6 = models.BooleanField(default=False)
     is_ongoing = models.BooleanField(default=False)
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='forms')
-    user_type = models.CharField(max_length=10, choices=User.USER_TYPE_CHOICES, editable=False)
+    user_type = models.CharField(max_length=10, choices=User.USER_TYPE_CHOICES)
 
     def __str__(self):
         return f"{self.category.capitalize()}: {self.title}"
+
