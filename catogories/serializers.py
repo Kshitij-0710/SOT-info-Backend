@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
 from authentication.models import User
-from .models import Form
+from .models import Form,Placement
 class UserSerializer(serializers.ModelSerializer):
     """Serializer for User data to include in Form responses"""
     class Meta:
@@ -21,3 +21,8 @@ class FormSerializer(serializers.ModelSerializer):
             'user_type', 'is_top_6', 'is_ongoing', 'user'
         ]
         read_only_fields = ['user_type', 'is_top_6']
+class PlacementSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Placement
+        fields = ['id', 'title', 'student', 'description', 'package', 'company', 'date', 'created_at']
+        read_only_fields = ['created_at']

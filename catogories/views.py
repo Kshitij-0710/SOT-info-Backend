@@ -3,6 +3,10 @@ from .models import Form
 from .serializers import FormSerializer
 from rest_framework.decorators import action
 from rest_framework.response import Response
+from .models import Placement
+from .serializers import PlacementSerializer
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework.filters import SearchFilter, OrderingFilter
 
 class ReadOnlyOrAuthenticated(permissions.BasePermission):
     """
@@ -128,3 +132,14 @@ class FormViewSet(viewsets.ModelViewSet):
             user=self.request.user,
             user_type=self.request.user.user_type
         )
+
+
+class PlacementViewSet(viewsets.ModelViewSet):
+    queryset = Placement.objects.all()
+    serializer_class = PlacementSerializer
+    permission_classes = [permissions.IsAuthenticated]
+    filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
+    filterset_fields = ['company', 'date', 'student']
+    search_fields = ['title', 'description', 'company', 'student']
+    ordering_fields = ['date', 'package', 'company']
+    ordering = ['-date']  # Default ordering by date (newest first)
