@@ -111,10 +111,10 @@ WSGI_APPLICATION = 'sotinfo.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'sotinfo_db',
-        'USER': 'sotinfo_user',
-        'PASSWORD': '1234',
-        'HOST': 'localhost',
+        'NAME': 'postgres',
+        'USER': 'postgres',
+        'PASSWORD': 'xIuzGZxOSrM1MqD3',
+        'HOST': 'lowly-jaunty-bigeye.data-1.use1.tembo.io',
         'PORT': '5432',
         'OPTIONS': {
             'client_encoding': 'UTF8',
