@@ -143,3 +143,13 @@ class PlacementViewSet(viewsets.ModelViewSet):
     search_fields = ['title', 'description', 'company', 'student']
     ordering_fields = ['date', 'package', 'company']
     ordering = ['-date']  # Default ordering by date (newest first)
+    
+    @action(detail=False, methods=['get'])
+    def top_placements(self, request):
+        """
+        Retrieves the top 2 placements marked with top_2=True
+        Returns them ordered by package value (highest first)
+        """
+        top_placements = self.get_queryset().filter(top_2=True).order_by('-package')[:2]
+        serializer = self.get_serializer(top_placements, many=True)
+        return Response(serializer.data)

@@ -42,6 +42,7 @@ class Placement(models.Model):
     title = models.CharField(max_length=255)
     student = models.CharField(max_length=255)  
     description = models.TextField()
+    top_2 = models.BooleanField(default=False)
     package = models.DecimalField(max_digits=10, decimal_places=2)  
     company = models.CharField(max_length=255)
     date = models.DateField()

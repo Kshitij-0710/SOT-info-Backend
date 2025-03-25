@@ -24,5 +24,5 @@ class FormSerializer(serializers.ModelSerializer):
 class PlacementSerializer(serializers.ModelSerializer):
     class Meta:
         model = Placement
-        fields = ['id', 'title', 'student', 'description', 'package', 'company', 'date', 'created_at']
+        fields = ['id', 'title', 'student', 'description', 'package', 'top_2', 'company', 'date', 'created_at']
         read_only_fields = ['created_at']
