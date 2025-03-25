@@ -10,6 +10,6 @@ class FormAdmin(admin.ModelAdmin):
 
 @admin.register(Placement)
 class PlacementAdmin(admin.ModelAdmin):
-    list_display = ['title', 'student', 'company', 'package', 'date']
-    list_filter = ['company', 'date']
-    search_fields = ['title', 'description', 'company', 'student']
+    list_display = ['title', 'student', 'company', 'package', 'date','top_2']
+    list_filter = ['company', 'date','top_2']
+    search_fields = ['title', 'description', 'company', 'student','top_2']
