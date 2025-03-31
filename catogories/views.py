@@ -3,8 +3,8 @@ from .models import Form
 from .serializers import FormSerializer
 from rest_framework.decorators import action
 from rest_framework.response import Response
-from .models import Placement
-from .serializers import PlacementSerializer
+from .models import Placement, Event, EventRegistration
+from .serializers import PlacementSerializer, EventSerializer, EventRegistrationSerializer
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import SearchFilter, OrderingFilter
 
@@ -153,3 +153,27 @@ class PlacementViewSet(viewsets.ModelViewSet):
         top_placements = self.get_queryset().filter(top_2=True).order_by('-package')[:2]
         serializer = self.get_serializer(top_placements, many=True)
         return Response(serializer.data)
+    
+class EventViewSet(viewsets.ModelViewSet):
+    queryset = Event.objects.all().order_by('-date')
+    serializer_class = EventSerializer
+    permission_classes = [permissions.AllowAny]
+
+    @action(detail=True, methods=['post'], permission_classes=[permissions.IsAuthenticated])
+    def register(self, request, pk=None):
+        """API endpoint for users to register for an event."""
+        event = self.get_object()
+        user = request.user
+
+        # Check if already registered
+        if EventRegistration.objects.filter(event=event, user=user).exists():
+            return Response({"detail": "You are already registered for this event."}, status=400)
+
+        # Register user
+        registration = EventRegistration.objects.create(event=event, user=user)
+        return Response(EventRegistrationSerializer(registration).data, status=201)
+
+class EventRegistrationViewSet(viewsets.ModelViewSet):
+    queryset = EventRegistration.objects.all()
+    serializer_class = EventRegistrationSerializer
+    permission_classes = [permissions.IsAuthenticated]
