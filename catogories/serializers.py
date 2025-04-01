@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
 from authentication.models import User
-from .models import Form,Placement
+from .models import Form,Placement, Event, EventRegistration
 class UserSerializer(serializers.ModelSerializer):
     """Serializer for User data to include in Form responses"""
     class Meta:
@@ -26,3 +26,24 @@ class PlacementSerializer(serializers.ModelSerializer):
         model = Placement
         fields = ['id', 'title', 'student', 'description', 'package', 'top_2', 'company', 'date', 'created_at']
         read_only_fields = ['created_at']
+
+class EventSerializer(serializers.ModelSerializer):
+    registered_users = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Event
+        fields = [
+            'id', 'title', 'date', 'location', 'description', 
+            'organizer', 'is_featured', 'image_url', 'created_at', 
+            'registered_users'
+        ]
+        read_only_fields = ['id', 'created_at']
+
+    def get_registered_users(self, obj):
+        return obj.registrations.count()  # Count of registered users
+
+class EventRegistrationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = EventRegistration
+        fields = ['id', 'event', 'user', 'registered_at']
+        read_only_fields = ['id', 'registered_at']
