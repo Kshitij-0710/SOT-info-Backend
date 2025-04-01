@@ -24,7 +24,8 @@ DEBUG = False
 ALLOWED_HOSTS = ['*']
 CSRF_TRUSTED_ORIGINS = [
 
-    "https://dev.sajayr.tech"
+    "https://dev.sajayr.tech",
+    "https://prod.sost.in"
 
 ]
 

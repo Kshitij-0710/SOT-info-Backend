@@ -137,7 +137,6 @@ class FormViewSet(viewsets.ModelViewSet):
 class PlacementViewSet(viewsets.ModelViewSet):
     queryset = Placement.objects.all()
     serializer_class = PlacementSerializer
-    permission_classes = [permissions.IsAuthenticated]
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
     filterset_fields = ['company', 'date', 'student']
     search_fields = ['title', 'description', 'company', 'student']
