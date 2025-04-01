@@ -158,6 +158,16 @@ class EventViewSet(viewsets.ModelViewSet):
     serializer_class = EventSerializer
     permission_classes = [permissions.AllowAny]
 
+    @action(detail=False, methods=['get'])
+    def featured(self, request):
+        """
+        Returns only featured events.
+        Accessible via: /api/events/featured/
+        """
+        featured_events = Event.objects.filter(is_featured=True).order_by('-date')
+        serializer = self.get_serializer(featured_events, many=True)
+        return Response(serializer.data)    
+
     @action(detail=True, methods=['post'], permission_classes=[permissions.IsAuthenticated])
     def register(self, request, pk=None):
         """API endpoint for users to register for an event."""
