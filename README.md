@@ -48,6 +48,7 @@ A Django-based REST API backend for the School of Technology information portal.
 - `GET /api/forms/:id/` - Retrieve a specific form
 - `PUT/PATCH /api/forms/:id/` - Update a form (owner only)
 - `DELETE /api/forms/:id/` - Delete a form (owner only)
+###More details on www.prod.sost.in/redoc
 
 ## Prerequisites
 
@@ -154,26 +155,11 @@ sotinfo/              # Project directory
 | EMAIL_HOST_PASSWORD | Password/app password for email |
 | DEFAULT_FROM_EMAIL | Default sender email |
 
-## Testing
-
-Run tests with:
-
-```bash
-python manage.py test
-```
 
 ## Contributing
 
-1. Fork the repository
-2. Create a feature branch: `git checkout -b feature/your-feature-name`
-3. Commit your changes: `git commit -m 'Add some feature'`
-4. Push to the branch: `git push origin feature/your-feature-name`
-5. Submit a pull request
-
-## License
-
-This project is licensed under the MIT License - see the LICENSE file for details.
+1. No Contributions are allowed as of now
 
 ## Contact
 
-For questions or support, please contact: sot-support@example.com
+For questions or support, please contact: kshitijmoghe10@gmail.com
