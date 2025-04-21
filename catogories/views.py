@@ -1,4 +1,4 @@
-from rest_framework import viewsets, permissions
+from rest_framework import viewsets, permissions,parsers
 from .models import Form
 from .serializers import FormSerializer
 from rest_framework.decorators import action
@@ -35,6 +35,7 @@ class FormViewSet(viewsets.ModelViewSet):
     """
     serializer_class = FormSerializer
     permission_classes = [ReadOnlyOrAuthenticated]
+    parser_classes = [parsers.MultiPartParser, parsers.FormParser]
     
     def get_queryset(self):
         """

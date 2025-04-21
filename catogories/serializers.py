@@ -15,7 +15,7 @@ class FormSerializer(serializers.ModelSerializer):
     class Meta:
         model = Form
         fields = [
-            'id', 'title', 'description', 'team_members', 
+            'id', 'title', 'document','description', 'team_members', 
             'tech_stack', 'projecturl', 'achivements', 
             'from_date', 'to_date', 'category', 'created_at', 
             'user_type', 'is_top_6', 'is_ongoing', 'user'
