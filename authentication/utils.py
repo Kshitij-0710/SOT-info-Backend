@@ -13,7 +13,7 @@ def send_otp_email(email, name, otp_code):
     This OTP will expire in 10 minutes.
     
     Thanks,
-    Your App Team
+    SOST
     '''
     
     from_email = settings.DEFAULT_FROM_EMAIL
