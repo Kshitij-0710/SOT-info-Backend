@@ -11,7 +11,7 @@ class Form(models.Model):
 
     title = models.CharField(max_length=255)
     description = models.TextField()
-    team_members = models.TextField(max_length=255)
+    team_members = models.TextField(max_length=255, blank=True, null=True)
     document = models.FileField(upload_to='form_documents/', blank=True, null=True)
     # Changed from TextField to ArrayField
     tech_stack = ArrayField(
