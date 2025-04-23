@@ -25,7 +25,9 @@ ALLOWED_HOSTS = ['*']
 CSRF_TRUSTED_ORIGINS = [
 
     "https://dev.sajayr.tech",
-    "https://prod.sost.in"
+    "https://prod.sost.in",
+    "http://147.93.18.65:8080",
+
 
 ]
 
@@ -41,6 +43,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django_filters',
     'rest_framework.authtoken',
     'rest_framework',
     'rest_framework_simplejwt',
@@ -53,10 +56,10 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.middleware.security.SecurityMiddleware',
+    'corsheaders.middleware.CorsMiddleware',  # Move this here
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
-    'corsheaders.middleware.CorsMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
@@ -81,7 +84,7 @@ SIMPLE_JWT = {
 load_dotenv()
 # Email settings (Using Gmail example)
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST = 'smtp.office365.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 
@@ -118,7 +121,7 @@ DATABASES = {
         'NAME': 'sotinfo_db',
         'USER': 'sotinfo_user',
         'PASSWORD': '1234',
-        'HOST': 'localhost',
+        'HOST': 'db',
         'PORT': '5432',
         'OPTIONS': {
             'client_encoding': 'UTF8',
@@ -164,7 +167,7 @@ USE_TZ = True
 
 # Static files settings (Important for Render)
 STATIC_URL = '/static/'
-STATIC_ROOT = BASE_DIR / 'staticfiles'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 # WhiteNoise storage
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
