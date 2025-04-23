@@ -8,3 +8,4 @@ __pycache__/
 staticfiles
 *.sh
 db.sqlite3
+.venv/
