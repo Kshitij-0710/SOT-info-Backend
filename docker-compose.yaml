@@ -1,0 +1,42 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:15
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    environment:
+      - POSTGRES_DB=sotinfo_db
+      - POSTGRES_USER=sotinfo_user
+      - POSTGRES_PASSWORD=1234
+    restart: always
+
+  web:
+    build: .
+    restart: always
+    depends_on:
+      - db
+    volumes:
+      - .:/app
+      - static_volume:/app/staticfiles
+      - media_volume:/app/media
+    command: gunicorn sotinfo.wsgi:application --bind 0.0.0.0:8000 --reload
+
+  nginx:
+    build: ./nginx
+    restart: always
+    ports:
+      - "80:80"
+      - "443:443"
+      - "8080:80"  # Keep for backward compatibility
+    volumes:
+      - static_volume:/app/staticfiles
+      - media_volume:/app/media
+      - /etc/letsencrypt/live/prod.sost.in/fullchain.pem:/etc/nginx/ssl/fullchain.pem
+      - /etc/letsencrypt/live/prod.sost.in/privkey.pem:/etc/nginx/ssl/privkey.pem
+    depends_on:
+      - web
+volumes:
+  postgres_data:
+  static_volume:
+  media_volume:

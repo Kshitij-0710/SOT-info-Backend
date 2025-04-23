@@ -18,11 +18,18 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 load_dotenv()
 SECRET_KEY = os.environ.get('SECRET_KEY')
-DEBUG = False
+DEBUG = True
 
 
 ALLOWED_HOSTS = ['*']
+CSRF_TRUSTED_ORIGINS = [
 
+    "https://dev.sajayr.tech",
+    "https://prod.sost.in",
+    "http://147.93.18.65:8080",
+
+
+]
 
 # Application definition
 
@@ -36,21 +43,23 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django_filters',
     'rest_framework.authtoken',
     'rest_framework',
     'rest_framework_simplejwt',
     'corsheaders',
     'sotinfo',
+    'linkedin_embed',
     'catogories'
 ]
 
 MIDDLEWARE = [
     'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.middleware.security.SecurityMiddleware',
+    'corsheaders.middleware.CorsMiddleware',  # Move this here
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
-    'corsheaders.middleware.CorsMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
@@ -62,18 +71,20 @@ REST_FRAMEWORK = {
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
 }
-
+# Media files (Uploads)
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 # JWT settings
 from datetime import timedelta
 
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),
-    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
+    'ACCESS_TOKEN_LIFETIME': timedelta(hours=48),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=7),  
 }
 load_dotenv()
 # Email settings (Using Gmail example)
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST = 'smtp.office365.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 
@@ -107,10 +118,10 @@ WSGI_APPLICATION = 'sotinfo.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'postgres',
-        'USER': 'postgres',
-        'PASSWORD': 'xIuzGZxOSrM1MqD3',
-        'HOST': 'lowly-jaunty-bigeye.data-1.use1.tembo.io',
+        'NAME': 'sotinfo_db',
+        'USER': 'sotinfo_user',
+        'PASSWORD': '1234',
+        'HOST': 'db',
         'PORT': '5432',
         'OPTIONS': {
             'client_encoding': 'UTF8',
@@ -156,7 +167,7 @@ USE_TZ = True
 
 # Static files settings (Important for Render)
 STATIC_URL = '/static/'
-STATIC_ROOT = BASE_DIR / 'staticfiles'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 # WhiteNoise storage
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
