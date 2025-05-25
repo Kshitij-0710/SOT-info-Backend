@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from .models import User, RegistrationOTP
 from django.contrib.auth.hashers import make_password
+from django.contrib.auth import authenticate
 
 class UserRegistrationSerializer(serializers.Serializer):
     email = serializers.EmailField()
@@ -9,11 +10,32 @@ class UserRegistrationSerializer(serializers.Serializer):
     user_type = serializers.ChoiceField(choices=User.USER_TYPE_CHOICES, default='STUDENT')
     password = serializers.CharField(write_only=True)
     ref_name = "AuthUserSerializer" 
-    def validate_email(self, value):
-        # Check if email already exists in the User model
-        if User.objects.filter(email=value).exists():
-            raise serializers.ValidationError("Email address already in use.")
-        return value
+
+    def validate(self, attrs):
+        email = attrs.get('email').lower()
+        user_type = attrs.get('user_type')
+
+        # Check for unique (email, user_type) pair
+        if User.objects.filter(email=email, user_type=user_type).exists():
+            raise serializers.ValidationError("This email is already registered with the selected user type.")
+        return attrs
+
+    def create(self, validated_data):
+        password = validated_data.pop('password')
+        email = validated_data['email'].lower()
+        user_type = validated_data['user_type'].upper()
+
+        # Create the user
+        user = User(
+            email=email,
+            name=validated_data['name'],
+            phone_number=validated_data['phone_number'],
+            user_type=user_type,
+        )
+        user.set_password(password)
+
+        return user
+
 
 class OTPVerificationSerializer(serializers.Serializer):
     email = serializers.EmailField()
@@ -21,7 +43,6 @@ class OTPVerificationSerializer(serializers.Serializer):
     
     def validate(self, data):
         try:
-            # Get the temporary registration data with OTP
             registration_otp = RegistrationOTP.objects.filter(
                 email=data['email']
             ).order_by('-created_at').first()
@@ -43,6 +64,22 @@ class OTPVerificationSerializer(serializers.Serializer):
 class UserLoginSerializer(serializers.Serializer):
     email = serializers.EmailField()
     password = serializers.CharField()
+    user_type = serializers.ChoiceField(choices=User.USER_TYPE_CHOICES)
+
+    def validate(self, data):
+        email = data.get('email').lower()
+        password = data.get('password')
+        user_type = data.get('user_type').upper()
+
+        username_id = f"{email}__{user_type}"
+        user = authenticate(username=username_id, password=password)
+
+        if not user:
+            raise serializers.ValidationError("Invalid credentials for this user type.")
+
+        data['user'] = user
+        return data
+
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:

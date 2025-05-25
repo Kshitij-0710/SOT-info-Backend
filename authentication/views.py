@@ -73,7 +73,8 @@ class AuthViewSet(viewsets.GenericViewSet):
             phone_number=registration_data.phone_number,
             user_type=registration_data.user_type,
             password=registration_data.password,  # Already hashed during registration
-            is_verified=True
+            is_verified=True,
+            username_id=f"{registration_data.email}__{registration_data.user_type}"
         )
         
         # Delete the used registration OTP
@@ -97,14 +98,15 @@ class AuthViewSet(viewsets.GenericViewSet):
         email = serializer.validated_data['email']
         password = serializer.validated_data['password']
         
-        user = authenticate(email=email, password=password)
-        
-        if not user:
+        user_type = serializer.validated_data['user_type']
+        user = User.objects.filter(email=email, user_type=user_type).first()
+
+        if not user or not user.check_password(password):
             return Response(
-                {'message': 'Invalid credentials.'},
+                {'message': 'Invalid credentials or user type.'},
                 status=status.HTTP_401_UNAUTHORIZED
             )
-        
+
         # Generate tokens
         refresh = RefreshToken.for_user(user)
         
