@@ -1,7 +1,7 @@
 from rest_framework.routers import DefaultRouter
 from authentication.views import AuthViewSet
 from catogories.views import EventRegistrationViewSet, FormViewSet,PlacementViewSet, EventViewSet
-
+from feedback.views import FeedbackViewSet
 
 router = DefaultRouter() 
 
@@ -10,3 +10,4 @@ router.register(r'forms', FormViewSet, basename='forms')
 router.register(r'placements',PlacementViewSet,basename='placement')
 router.register(r'events', EventViewSet, basename='events')
 router.register(r'event-registrations', EventRegistrationViewSet, basename='event-registrations')
+router.register(r'feedback', FeedbackViewSet, basename='feedback')
