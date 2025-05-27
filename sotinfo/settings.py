@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django_filters',
+    'feedback',
     'rest_framework.authtoken',
     'rest_framework',
     'rest_framework_simplejwt',
@@ -84,7 +85,7 @@ SIMPLE_JWT = {
 load_dotenv()
 # Email settings (Using Gmail example)
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.office365.com'
+EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 
@@ -121,7 +122,7 @@ DATABASES = {
         'NAME': 'sotinfo_db',
         'USER': 'sotinfo_user',
         'PASSWORD': '1234',
-        'HOST': 'db',
+        'HOST': 'localhost',
         'PORT': '5432',
         'OPTIONS': {
             'client_encoding': 'UTF8',
