@@ -45,7 +45,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     # Unique username ID for Django's internal auth
     username_id = models.CharField(max_length=100, unique=True, editable=False)
     
-    email = models.EmailField(max_length=255)
+    email = models.EmailField(max_length=255, unique=True)
     name = models.CharField(max_length=255)
     phone_number = models.CharField(max_length=15)
     user_type = models.CharField(max_length=10, choices=USER_TYPE_CHOICES, default='STUDENT')
