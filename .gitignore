@@ -9,3 +9,6 @@ staticfiles
 *.sh
 db.sqlite3
 .venv/
+
+# to ignore the settings.py of sotinfo app
+sotinfo/settings.py
